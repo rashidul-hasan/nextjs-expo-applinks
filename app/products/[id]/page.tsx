@@ -1,9 +1,8 @@
-// 'use client'
+// app/product/[id]/page.tsx
+'use client';
 
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic'; 
-
-import { notFound } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
 type Product = {
@@ -19,36 +18,75 @@ type Product = {
   };
 };
 
-export default async function ProductPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  let {id} = await params;
-  // id = Number(id)
-  console.log('id in details', id)
-  // if (isNaN(id) || id <= 0) {
-  //   notFound();
-  // }
+export default function ProductPage() {
+  const params = useParams();
+  const router = useRouter();
+  const id = params.id as string;
 
-  let product: Product | null = null;
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  try {
-    const res = await fetch(`https://fakestoreapi.com/products/${id}`, {
-      // next: { revalidate: 3600 },
-    });
+  useEffect(() => {
+    if (!id) return;
 
-    if (!res.ok) {
-      if (res.status === 404) notFound();
-      throw new Error("Failed to fetch product");
-    }
-    product = await res.json();
-  } catch (error) {
-    console.error("Error fetching product:", error);
-    notFound();
+    fetch(`https://fakestoreapi.com/products/${id}`)
+      .then(res => {
+        if (res.status === 404) {
+          router.push('/404');
+          return null;
+        }
+        if (!res.ok) throw new Error("Failed to fetch product");
+        return res.json();
+      })
+      .then(data => {
+        if (data) {
+          setProduct(data);
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Error fetching product:", err);
+        setError(true);
+        setLoading(false);
+      });
+  }, [id, router]);
+
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <nav className="mb-6">
+          <Link 
+            href="/" 
+            className="text-indigo-600 hover:text-indigo-800 flex items-center"
+          >
+            ← Back to Products
+          </Link>
+        </nav>
+        <div className="bg-white rounded-2xl shadow-md p-12 text-center">
+          <p className="text-gray-500">Loading product...</p>
+        </div>
+      </div>
+    );
   }
 
-  if(!product) return null;
+  if (error || !product) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <nav className="mb-6">
+          <Link 
+            href="/" 
+            className="text-indigo-600 hover:text-indigo-800 flex items-center"
+          >
+            ← Back to Products
+          </Link>
+        </nav>
+        <div className="bg-white rounded-2xl shadow-md p-12 text-center">
+          <p className="text-red-500">Failed to load product. Please try again later.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto">

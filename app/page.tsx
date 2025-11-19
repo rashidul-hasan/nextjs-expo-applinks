@@ -1,46 +1,7 @@
 // app/page.tsx
+import { ProductList } from "@/components/ProductList";
 
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic'; 
-
-import { ProductCard } from "@/components/ProductCard";
-
-type Product = {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-};
-
-export default async function HomePage() {
-  let products: Product[] = [];
-
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-
-    const res = await fetch("https://fakestoreapi.com/products?limit=12", {
-      signal: controller.signal,
-      headers: {
-        'User-Agent': 'Mozilla/5.0',
-        'Accept': 'application/json',
-      }
-    });
-    
-    clearTimeout(timeoutId);
-
-    if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-    products = await res.json();
-  } catch (error) {
-    if (error?.name === 'AbortError') {
-      console.error("Fetch timeout after 10 seconds");
-    } else {
-      console.error("Error fetching products:", error);
-    }
-  }
-
+export default function HomePage() {
   return (
     <div>
       <div className="mb-8 text-center">
@@ -55,19 +16,8 @@ export default async function HomePage() {
         </p>
       </div>
 
-      {products.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-gray-500">Loading products...</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      )}
+      <ProductList />
 
-      {/* Optional: Smart Banner hint for Android users */}
       <div 
         id="app-hint" 
         className="mt-12 p-4 bg-blue-50 border border-blue-200 rounded-lg text-blue-800 max-w-2xl mx-auto"
