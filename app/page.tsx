@@ -1,4 +1,8 @@
 // app/page.tsx
+
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic'; 
+
 import { ProductCard } from "@/components/ProductCard";
 
 type Product = {
