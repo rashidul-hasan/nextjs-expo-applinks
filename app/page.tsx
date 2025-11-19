@@ -34,7 +34,7 @@ export default async function HomePage() {
     if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
     products = await res.json();
   } catch (error) {
-    if (error.name === 'AbortError') {
+    if (error?.name === 'AbortError') {
       console.error("Fetch timeout after 10 seconds");
     } else {
       console.error("Error fetching products:", error);
