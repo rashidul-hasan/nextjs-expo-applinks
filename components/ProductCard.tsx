@@ -15,7 +15,7 @@ export function ProductCard({ product }: { product: Product }) {
     console.log('ProductCard', product)
   return (
     <Link 
-      href={`/product/${product.id}`} 
+      href={`/products/${product.id}`} 
       className="group block bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden border"
     >
       <div className="aspect-square w-full bg-gray-100 flex items-center justify-center p-4">

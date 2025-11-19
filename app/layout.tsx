@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,7 +40,7 @@ function Header() {
   return (
     <header className="bg-indigo-600 text-white py-4">
       <div className="container mx-auto px-4 flex items-center">
-        <div className="text-xl font-bold">🛍️ YourStore</div>
+        <Link href={'/'}><div className="text-xl font-bold">🛍️ YourStore</div></Link>
         <nav className="ml-auto hidden md:block">
           <a href="/" className="ml-6 hover:underline">Home</a>
           <a href="/#categories" className="ml-6 hover:underline">Categories</a>
