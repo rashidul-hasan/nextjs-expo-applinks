@@ -44,6 +44,8 @@ export default async function ProductPage({
     notFound();
   }
 
+  if(!product) return null;
+
   return (
     <div className="max-w-4xl mx-auto">
       <nav className="mb-6">
