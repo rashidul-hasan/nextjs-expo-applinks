@@ -31,7 +31,7 @@ export default async function ProductPage({
 
   try {
     const res = await fetch(`https://fakestoreapi.com/products/${id}`, {
-      next: { revalidate: 3600 },
+      // next: { revalidate: 3600 },
     });
 
     if (!res.ok) {

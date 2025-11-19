@@ -16,7 +16,7 @@ export default async function HomePage() {
   try {
     const res = await fetch("https://fakestoreapi.com/products?limit=12", {
       // Optional: Enable caching (great for perf!)
-      next: { revalidate: 3600 }, // ISR: revalidate every hour
+      // next: { revalidate: 3600 }, // ISR: revalidate every hour
     });
 
     if (!res.ok) throw new Error("Failed to fetch products");
